@@ -11,20 +11,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Initialize Dummy Xcode Project Structure
+      # This sets up a minimal framework structure for GitHub's compiler
+      - name: Initialize App Structure
         run: |
-          # This sets up a minimal framework structure for GitHub's compiler
           mkdir -p MyCloudApp.xcodeproj
           echo '{"archiveVersion":1,"objectVersion":56,"objects":{},"rootObject":""}' > MyCloudApp.xcodeproj/project.pbxproj
 
-      - name: Compile and Package App Folder
+      # Compiles the SwiftUI code strictly targeting physical arm64 iPhone architecture
+      - name: Compile Code
         run: |
           mkdir -p Payload
-          # Cloud compilation targeting generic arm64 iPhone architecture
-          xcrun -sdk iphoneos swiftc ContentView.swift -o Payload/MyCloudApp
+          xcrun -sdk iphoneos swiftc ContentView.swift \
+            -target arm64-apple-ios15.0 \
+            -o Payload/MyCloudApp
           zip -r MyCloudApp.ipa Payload
 
-      - name: Upload Artifact to GitHub
+      # Saves the ready-to-install installer package as a download
+      - name: Save Installer
         uses: actions/upload-artifact@v4
         with:
           name: MyUnsignedApp
