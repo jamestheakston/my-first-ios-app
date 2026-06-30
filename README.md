@@ -1,0 +1,1 @@
+## For installation guide, visit https://cookeryapp.pages.dev/download
