@@ -657,6 +657,7 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate {
 }
 
 @main
+@available(iOS 16.0, *)
 struct CookeryAIApp: App {
     @StateObject private var auth = SupabaseAuth()
     
