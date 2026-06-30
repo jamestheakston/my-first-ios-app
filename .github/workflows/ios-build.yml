@@ -23,6 +23,7 @@ jobs:
           mkdir -p Payload
           xcrun -sdk iphoneos swiftc ContentView.swift \
             -target arm64-apple-ios15.0 \
+            -parse-as-library \
             -o Payload/MyCloudApp
           zip -r MyCloudApp.ipa Payload
 
