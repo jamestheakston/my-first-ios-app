@@ -27,13 +27,15 @@ struct ContentView: View {
             title: "Classic Avocado Toast",
             description: "A quick, creamy, and crispy breakfast favorite.",
             ingredients: ["1 slice of sourdough bread", "1/2 ripe avocado", "1 tsp chili flakes", "Salt & pepper to taste"],
-            instructions: ["Toast the bread to your desired crispiness.", "Mash the avocado in a bowl with salt and pepper.", "Spread evenly over the toast and top with chili flakes."]
+            instructions: ["Toast the bread to your desired crispiness.", "Mash the avocado in a bowl with salt and pepper.", "Spread evenly over the toast and top with chili flakes."],
+            prepTime: 5
         ),
         Recipe(
             title: "Quick Garlic Pasta",
             description: "A simple, comforting Italian dinner made in under 15 minutes.",
             ingredients: ["200g Spaghetti", "3 cloves garlic, sliced", "2 tbsp olive oil", "Fresh parsley"],
-            instructions: ["Boil pasta in salted water according to package instructions.", "Sauté garlic in olive oil over low heat until golden.", "Toss pasta in the garlic oil and garnish with chopped parsley."]
+            instructions: ["Boil pasta in salted water according to package instructions.", "Sauté garlic in olive oil over low heat until golden.", "Toss pasta in the garlic oil and garnish with chopped parsley."],
+            prepTime: 15
         )
     ]
     
@@ -65,7 +67,7 @@ struct ContentView: View {
                                 .font(.headline)
                         }
                         .foregroundColor(.white)
-                        .frame(maxWidth: . Kraus)
+                        .frame(maxWidth: .infinity)
                         .frame(height: 50)
                         .background(Color.blue)
                         .cornerRadius(12)
@@ -81,9 +83,19 @@ struct ContentView: View {
                         ForEach(recipes) { recipe in
                             Button(action: { selectedRecipe = recipe }) {
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text(recipe.title)
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
+                                    HStack {
+                                        Text(recipe.title)
+                                            .font(.headline)
+                                            .foregroundColor(.primary)
+                                        Spacer()
+                                        Text("\(recipe.prepTime) mins")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 4)
+                                            .background(Color(.systemGray5))
+                                            .cornerRadius(6)
+                                    }
                                     Text(recipe.description)
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
@@ -120,6 +132,14 @@ struct RecipeDetailView: View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        Image(systemName: "clock")
+                            .foregroundColor(.secondary)
+                        Text("Ready in \(recipe.prepTime) minutes")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    
                     Text(recipe.description)
                         .font(.body)
                         .foregroundColor(.secondary)
@@ -166,7 +186,7 @@ struct RecipeDetailView: View {
     }
 }
 
-// MARK: - AI Generator View Placeholder
+// MARK: - AI Generator View
 struct AIGeneratorView: View {
     @Binding var recipes: [Recipe]
     @Binding var isPresented: Bool
@@ -184,7 +204,8 @@ struct AIGeneratorView: View {
                         title: "AI Generated Meal",
                         description: "A custom creation using your ingredients.",
                         ingredients: ingredients.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) },
-                        instructions: ["Combine the ingredients.", "Cook thoroughly.", "Serve hot."]
+                        instructions: ["Combine the ingredients.", "Cook thoroughly.", "Serve hot."],
+                        prepTime: 10
                     )
                     recipes.append(newRecipe)
                     isPresented = false
